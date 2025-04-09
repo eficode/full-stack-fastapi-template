@@ -29,6 +29,29 @@ Make sure your editor is using the correct Python virtual environment, with the 
 
 Modify or add SQLModel models for data and SQL tables in `./backend/app/models.py`, API endpoints in `./backend/app/api/`, CRUD (Create, Read, Update, Delete) utils in `./backend/app/crud.py`.
 
+## Accessing the Application
+
+If you made no changes to the environment files, after you run `docker-compose up`, your backend application will
+be running on `localhost:8000`. The API docs for your application are in `localhost:8000/docs`.
+
+First thing you need is an access token for your requests. You can get that by running the following command:
+
+* Default admin username is `admin@example.com`
+* Default admin password is `changethis`.
+
+```console
+$ curl -X 'POST' 'http://localhost:8000/api/v1/login/access-token' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'grant_type=password&username=admin%40example.com&password=changethis&scope=&client_id=string&client_secret=string'
+```
+
+As a response, you will receive a JSON object with the token and the type of token:
+
+```json
+{"access_token":"<token>","token_type":"bearer"}
+```
+
 ## VS Code
 
 There are already configurations in place to run the backend through the VS Code debugger, so that you can use breakpoints, pause and explore variables, etc.
