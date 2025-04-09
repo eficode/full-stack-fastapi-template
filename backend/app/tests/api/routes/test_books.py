@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from sqlmodel import Session
 
 from app.core.config import settings
-from app.tests.utils.item import create_random_book
+from app.tests.utils.book import create_random_book
 
 
 def test_create_book(

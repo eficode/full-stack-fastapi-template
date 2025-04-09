@@ -17,8 +17,8 @@ def create_random_book(db: Session) -> Book:
     pages = 100
     price = 9.99
     book_in = BookCreate(
-        title=title,
-        description=description,
+        title=title, 
+        description=description, 
         published_year=published_year,
         isbn=isbn,
         pages=pages,
