@@ -11,6 +11,10 @@ Start the local development environment with Docker Compose following the guide 
 
 ## General Workflow
 
+# TODO: Add note Python version <=3.11
+# TODO: uv venv --python <version>
+
+
 By default, the dependencies are managed with [uv](https://docs.astral.sh/uv/), go there and install it.
 
 From `./backend/` you can install all the dependencies with:
@@ -24,6 +28,14 @@ Then you can activate the virtual environment with:
 ```console
 $ source .venv/bin/activate
 ```
+
+> :exclamation: **NOTE!** There are some compatibility issues with `python 3.13` and `httptools`, which is why `uv sync` might not create the
+> virtual environment properly. In order to bypass this, ensure you have an older Python version installed (we've tested this with Python 3.10.17
+> and 3.11.10). If you have multiple Python versions installed, you can select a specific Python version for `uv` with
+>
+> ```console
+> uv venv --python <version> # E.g. 3.10.17
+> ```
 
 Make sure your editor is using the correct Python virtual environment, with the interpreter at `backend/.venv/bin/python`.
 
