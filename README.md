@@ -26,3 +26,20 @@ learning. Instructions to set up local environment is described in [backend/READ
 
 If you want to read the full instructions and latest version of the Full Stack FastAPI template, head over to the
 original repository.
+
+## Exercises
+
+### Create a Copilot Instruction File
+
+### Create a Prompt File
+
+    - Type hinting
+    - Error details
+    - Method docstring
+    - Method max length = x
+    - Naming convention
+
+### Compare Agents And Edits
+
+    - Real DB is used in unit tests --> Mock
+    - Refactoring Agents vs. Edits
