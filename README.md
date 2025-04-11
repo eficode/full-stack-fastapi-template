@@ -27,19 +27,32 @@ learning. Instructions to set up local environment is described in [backend/READ
 If you want to read the full instructions and latest version of the Full Stack FastAPI template, head over to the
 original repository.
 
-## Exercises
+## Exercises For Planning Session
 
 ### Create a Copilot Instruction File
 
-### Create a Prompt File
-
-    - Type hinting
-    - Error details
-    - Method docstring
+- Workspace index
+- Generate an instruction file with Copilot
     - Method max length = x
     - Naming convention
+    - Type hinting
+
+### Create a Prompt File (Optional)
+
+- Endpoint Conventions
+    - Error details
+    - Method docstring
 
 ### Compare Agents And Edits
 
-    - Real DB is used in unit tests --> Mock
-    - Refactoring Agents vs. Edits
+- Refactoring Agents vs. Edits
+    - Add Author model and relationship to Books model
+        - Add Unit tests
+
+### Postgres MCP server
+
+- Initialize a MCP server for PostgreSQL
+
+## Exercises For Training Session
+
+- Real DB is used in unit tests --> Mock
