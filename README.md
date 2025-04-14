@@ -29,27 +29,54 @@ original repository.
 
 ## Exercises For Planning Session
 
+### Workspace index (Optional)
+
+A workspace index helps Copilot better analyze and accurately search your codebase for relevant files when generating and answer.
+The indexing might take a while, so it's good to do this early to speed up Copilot responses later on. However, once the index is done,
+it doesn't need to be repeated as Copilot will automatically update the index with the new changes.
+
 ### Create a Copilot Instruction File
 
-- Workspace index
-- Generate an instruction file with Copilot
-    - Method max length = x
-    - Naming convention
-    - Type hinting
+Generate an instruction file in freestyle markdown that will include information you want to add to all Copilot prompts.
+The instruction file is simply a markdown file that resides in `.github/copilot-instructions.md`. The instructions can
+include for example the language that you want Copilot to answer in, the structure of those answers, some coding best
+practices or company policies, etc.
+
+For example,
+
+> All Python files must adhere to PEP 8 guidelines.
+>
+> Answer the prompt and only the prompt. Nothing else.
+
+are just some lines you could add into your instruction file
 
 ### Create a Prompt File (Optional)
 
-- Endpoint Conventions
-    - Error details
-    - Method docstring
+Create a prompt file to tell Copilot to follow specific instructions when generating new API endpoints. These instructions are:
+
+- All methods must be under 30 lines in length.
+- All method parameters must have proper type hints in place
+- When raising a `HTTPException`, there must be `details` added to the raise.
+- All new endpoints must have a sufficient docstring.
+
+Like a `copilot-instructions.md` file, prompt files are custom instructions you can add to your prompts, but only for the
+context of the current prompt. These files are named `<name>.prompt.md` and they need to be separately added as a context
+to your prompts.
 
 ### Compare Agents And Edits
 
-- Refactoring Agents vs. Edits
-    - Add Author model and relationship to Books model
-        - Add Unit tests
+Prompt Copilot Edits and Copilot Agent mode to create a new API route to add an `Authors` model and compare the results.
 
-### Postgres MCP server
+We have our `books` model in place, but books don't have appropraite authors. Each book should have one author and any author may
+have written more than one book. We need to refactor our codebase to address this change. Also, the new `Author` model needs to
+tested with proper unit tests.
+
+Consider the following questions:
+
+- How do the responses differ from the each other?
+- Which mode should you use in each scenario?
+
+### Initialize a MCP server for PostgreSQL
 
 - Initialize a MCP server for PostgreSQL
 
