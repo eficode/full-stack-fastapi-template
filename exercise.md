@@ -1,5 +1,25 @@
-
 ## Exercises For Planning Session
+
+### Agenda for the meeting
+- Structure of the workshops (updated version)
+- Talk about the exercise app
+    - Show the readme.md
+    - 2000+ lines of code
+    - 55 unit tests
+    - API authentication
+    - Docker dev environment
+    - PostgreSQL DB
+    - Show Swagger docs
+- Showcase the exercise app (form the IDE)
+    - Docker compose up
+    - Run the unit tests
+- Demo of the exercises
+    - Ask mode: Generate custom instructions file @workspace, #file:copilot-instructions.md
+    - Add Postgres MCP server to be able to query DB
+    - Agent mode: Add author API endpoints
+        - Point out that custom instructions are used
+        - Use a prompt that will add the new model and update DB migration scripts
+    - MCP: query the DB structure to show that the new table was created
 
 ### Workspace index (Optional)
 
