@@ -22,6 +22,33 @@ For example,
 
 are just some lines you could add into your instruction file
 
+- Create `.github/copilot-instructions.md`
+- Ask Copilot for Python best practices and add those to instructions file
+- Review suggested changes and fix accordingly.
+
+### Initialize a MCP server for PostgreSQL
+
+- Explain the concept of MCP servers
+    - MCP (Model Context Protocol) servers provide a standardized way to interact with various tools, services, and systems.
+    - MCP server is run locally on the developer's workstation e.g. as a docker container
+    - Developers can initialize and manage MCP servers directly from their IDE or command-line tools.
+    - They allow seamless integration with Copilot for managing and interacting with external resources.
+    - They support multiple types of integrations, including databases, APIs, and cloud services.
+    - MCP servers enable real-time exploration, execution, and interaction with connected resources.
+- Show the list of available MCP servers
+    -  Talk about the [wide variety of available MCP servers](https://mcp.so/)
+    -  Show specifically the page for [PostgreSQL MCP server](https://mcp.so/server/postgres/modelcontextprotocol)
+- Initialize a MCP server for PostgreSQL
+    - VS Code => Shift+CMD+P
+    - \> MCP: Add server...
+    - Docker image => `mcp/postgres`
+    - Select "Allow"
+    - Postgres URL: `postgresql://postgres:changethis@host.docker.internal:5432/app`
+    - Select "Workspace"
+    - Start the server by clicking on the play button in mcp.json
+- Show that the query tool is available in the tools menu in the agent mode prompt box
+- Demo how to query, e.g. "What is the schema of my database #query"
+
 ### Create a Prompt File (Optional)
 
 Create a prompt file to tell Copilot to follow specific instructions when generating new API endpoints. These instructions are:
@@ -47,29 +74,6 @@ Consider the following questions:
 
 - How do the responses differ from the each other?
 - Which mode should you use in each scenario?
-
-### Initialize a MCP server for PostgreSQL
-
-- Explain the concept of MCP servers
-    - MCP (Model Context Protocol) servers provide a standardized way to interact with various tools, services, and systems.
-    - MCP server is run locally on the developer's workstation e.g. as a docker container
-    - Developers can initialize and manage MCP servers directly from their IDE or command-line tools.
-    - They allow seamless integration with Copilot for managing and interacting with external resources.
-    - They support multiple types of integrations, including databases, APIs, and cloud services.
-    - MCP servers enable real-time exploration, execution, and interaction with connected resources.
-- Show the list of available MCP servers
-    -  Talk about the [wide variety of available MCP servers](https://mcp.so/)
-    -  Show specifically the page for [PostgreSQL MCP server](https://mcp.so/server/postgres/modelcontextprotocol)
-- Initialize a MCP server for PostgreSQL
-    - VS Code => CMD+P
-    - \> MCP: Add server...
-    - Docker image => mcp/postgres
-    - Select "Allow"
-    - Postgres URL: postgresql://postgres:changethis@host.docker.internal:5432/app
-    - Select "Workspace"
-    - Start the server by clicking on the play button in mcp.json
-- Show that the query tool is available in the tools menu in the agent mode prompt box
-- Demo how to query, e.g. "What is the schema of my database #query"
 
 ## Exercises For Training Session
 
