@@ -14,8 +14,12 @@
     - Docker compose up
     - Run the unit tests
 - Demo of the exercises
-    - Ask mode: Generate custom instructions file @workspace, #file:copilot-instructions.md
-    - Add Postgres MCP server to be able to query DB
+    - Ask/Edits mode: Generate custom instructions file @workspace, #file:copilot-instructions.md
+        - Follow project naming conventions
+        - Use Python best practices
+        - Application hierarchy
+    - Add [Postgres Model Context Protocol (MCP) server](https://mcp.so/server/postgres/modelcontextprotocol?tab=content) to be able to query DB
+    - MCP: Query the DB structure to show current DB schema.
     - Agent mode: Add author API endpoints
         - Point out that custom instructions are used
         - Use a prompt that will add the new model and update DB migration scripts
