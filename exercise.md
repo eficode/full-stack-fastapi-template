@@ -1,37 +1,6 @@
-## Exercises For Planning Session
+## Exercises
 
-### Agenda for the meeting
-- Structure of the workshops (updated version)
-- Talk about the exercise app
-    - Show the readme.md
-    - 2000+ lines of code
-    - 55 unit tests
-    - API authentication
-    - Docker dev environment
-    - PostgreSQL DB
-    - Show Swagger docs
-- Showcase the exercise app (form the IDE)
-    - Docker compose up
-    - Run the unit tests
-- Demo of the exercises
-    - Ask/Edits mode: Generate custom instructions file @workspace, #file:copilot-instructions.md
-        - Follow project naming conventions
-        - Use Python best practices
-        - Application hierarchy
-    - Add [Postgres Model Context Protocol (MCP) server](https://mcp.so/server/postgres/modelcontextprotocol?tab=content) to be able to query DB
-    - MCP: Query the DB structure to show current DB schema.
-    - Agent mode: Add author API endpoints
-        - Point out that custom instructions are used
-        - Use a prompt that will add the new model and update DB migration scripts
-    - MCP: query the DB structure to show that the new table was created
-
-### Workspace index (Optional)
-
-A workspace index helps Copilot better analyze and accurately search your codebase for relevant files when generating and answer.
-The indexing might take a while, so it's good to do this early to speed up Copilot responses later on. However, once the index is done,
-it doesn't need to be repeated as Copilot will automatically update the index with the new changes.
-
-### Create a Copilot Instruction File
+### Create a custom instructions file
 
 Generate an instruction file in freestyle markdown that will include information you want to add to all Copilot prompts.
 The instruction file is simply a markdown file that resides in `.github/copilot-instructions.md`. The instructions can
@@ -48,21 +17,28 @@ are just some lines you could add into your instruction file
 
 - Create `.github/copilot-instructions.md`
 - Ask Copilot for Python best practices and add those to instructions file
-- Review suggested changes and fix accordingly.
+- Review suggested changes and fix accordingly
+- Think about what kind of contents would be useful in the file, e.g.
+      - Project structure
+      - Tehcnology stack, e.g. application and testing frameworks, data stores etc.
+      - Design patterns
+      - Description of the application purpose, business logic, use cases
+      - Coding conventions
+      - Instructions for building, running tests etc.
+- In the following exercises, take notice how the file is automatically added to all prompts. See if the contests could be refined based on the effectiveness of the prompts.
 
 ### Initialize a MCP server for PostgreSQL
 
-- Explain the concept of MCP servers
+- Racap of MCP servers
     - MCP (Model Context Protocol) servers provide a standardized way to interact with various tools, services, and systems.
     - MCP server is run locally on the developer's workstation e.g. as a docker container
     - Developers can initialize and manage MCP servers directly from their IDE or command-line tools.
     - They allow seamless integration with Copilot for managing and interacting with external resources.
     - They support multiple types of integrations, including databases, APIs, and cloud services.
     - MCP servers enable real-time exploration, execution, and interaction with connected resources.
-- Show the list of available MCP servers
-    -  Talk about the [wide variety of available MCP servers](https://mcp.so/)
-    -  Show specifically the page for [PostgreSQL MCP server](https://mcp.so/server/postgres/modelcontextprotocol)
-- Initialize a MCP server for PostgreSQL
+    -  [A wide variety of MCP servers are aldready available](https://mcp.so/)
+    -  In the following exercise [PostgreSQL MCP server](https://mcp.so/server/postgres/modelcontextprotocol) will be configured and used
+- Exercise: Initialize a MCP server for PostgreSQL (VS Code)
     - VS Code => Shift+CMD+P
     - \> MCP: Add server...
     - Docker image => `mcp/postgres`
@@ -70,10 +46,11 @@ are just some lines you could add into your instruction file
     - Postgres URL: `postgresql://postgres:changethis@host.docker.internal:5432/app`
     - Select "Workspace"
     - Start the server by clicking on the play button in mcp.json
-- Show that the query tool is available in the tools menu in the agent mode prompt box
-- Demo how to query, e.g. "What is the schema of my database #query"
+    - The query tool provided by the MCP server should be now available in the tools menu in the agent mode prompt box
+    - Try out the tool e.g. with the following prompt: "What is the schema of my database #query"
+    - Think about how the information provided by the MCP server could be utilised in prompts targeting the codebase
 
-### Create a Prompt File (Optional)
+### Prompt files
 
 Create a prompt file to tell Copilot to follow specific instructions when generating new API endpoints. These instructions are:
 
@@ -86,7 +63,7 @@ Like a `copilot-instructions.md` file, prompt files are custom instructions you 
 context of the current prompt. These files are named `<name>.prompt.md` and they need to be separately added as a context
 to your prompts.
 
-### Compare Agents And Edits
+### Comparison: Agent mode vs Edits
 
 Prompt Copilot Edits and Copilot Agent mode to create a new API route to add an `Authors` model and compare the results.
 
@@ -99,6 +76,3 @@ Consider the following questions:
 - How do the responses differ from the each other?
 - Which mode should you use in each scenario?
 
-## Exercises For Training Session
-
-- Real DB is used in unit tests --> Mock
