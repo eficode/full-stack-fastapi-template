@@ -1,7 +1,5 @@
-# Full Stack FastAPI Template
-
-<a href="https://github.com/fastapi/full-stack-fastapi-template/actions?query=workflow%3ATest" target="_blank"><img src="https://github.com/fastapi/full-stack-fastapi-template/workflows/Test/badge.svg" alt="Test"></a>
-<a href="https://coverage-badge.samuelcolvin.workers.dev/redirect/fastapi/full-stack-fastapi-template" target="_blank"><img src="https://coverage-badge.samuelcolvin.workers.dev/fastapi/full-stack-fastapi-template.svg" alt="Coverage"></a>
+# FastAPI Exercise Application for Copilot Trainings
+The purpose of this repository is to be used as an exercise application in GitHub Copilot trainings for Python developers. 
 
 ## Technology Stack and Features
 
@@ -14,16 +12,16 @@
 - 🔑 JWT (JSON Web Token) authentication.
 - 📫 Email based password recovery.
 - ✅ Tests with [Pytest](https://pytest.org).
-- 📞 [Traefik](https://traefik.io) as a reverse proxy / load balancer.
-- 🚢 Deployment instructions using Docker Compose, including how to set up a frontend Traefik proxy to handle automatic HTTPS certificates.
-- ~2000 LOC
-- 55 unit tests
+
+## How to get started
+TODO: Simplified instructions of how to
+- Install requirements (Docker, uv)
+- Run the local development environment (docker compose)
+- Run unit tests
+
+# Exercises 
+
+# Misc
 
 ## Notice About This Repository
-
-This is a heavily reduced version of the [fastapi/full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template)
-with just the backend remaining. The purpose of this repository is to be used as a lightweight app for GitHub Copilot
-learning. Instructions to set up local environment is described in [backend/README.md](backend/README.md).
-
-If you want to read the full instructions and latest version of the Full Stack FastAPI template, head over to the
-original repository.
+Forked from [fastapi/full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template). Frontend removed to make the project suitable for Python developers.
