@@ -1,27 +1,6 @@
-# FastAPI Exercise Application for Copilot Trainings
-The purpose of this repository is to be used as an exercise application in GitHub Copilot trainings for Python developers. 
+# Exercises
 
-## Technology Stack and Features
-
-- ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
-    - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
-    - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
-    - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
-- 🐋 [Docker Compose](https://www.docker.com) for development and production.
-- 🔒 Secure password hashing by default.
-- 🔑 JWT (JSON Web Token) authentication.
-- 📫 Email based password recovery.
-- ✅ Tests with [Pytest](https://pytest.org).
-
-## How to get started
-TODO: Simplified instructions of how to
-- Install requirements (Docker, uv)
-- Run the local development environment (docker compose)
-- Run unit tests
-
-# Exercises for the Copilot traning
-
-## 1. Create a custom instructions file
+## Create a custom instructions file
 
 Generate an instruction file in freestyle markdown that will include information you want to add to all Copilot prompts.
 The instruction file is simply a markdown file that resides in `.github/copilot-instructions.md`. The instructions can
@@ -48,7 +27,7 @@ are just some lines you could add into your instruction file
       - Instructions for building, running tests etc.
 - In the following exercises, take notice how the file is automatically added to all prompts. See if the contests could be refined based on the effectiveness of the prompts.
 
-## 2. Initialize a MCP server for PostgreSQL
+## Initialize a MCP server for PostgreSQL
 
 - Racap of MCP servers
     - MCP (Model Context Protocol) servers provide a standardized way to interact with various tools, services, and systems.
@@ -71,7 +50,7 @@ are just some lines you could add into your instruction file
     - Try out the tool e.g. with the following prompt: "What is the schema of my database #query"
     - Think about how the information provided by the MCP server could be utilised in prompts targeting the codebase
 
-## 3. Prompt files
+## Prompt files
 
 Create a prompt file to tell Copilot to follow specific instructions when generating new API endpoints. These instructions are:
 
@@ -84,7 +63,7 @@ Like a `copilot-instructions.md` file, prompt files are custom instructions you 
 context of the current prompt. These files are named `<name>.prompt.md` and they need to be separately added as a context
 to your prompts.
 
-## 4. Comparison: Agent mode vs Edits
+## Comparison: Agent mode vs Edits
 
 Prompt Copilot Edits and Copilot Agent mode to create a new API route to add an `Authors` model and compare the results.
 
@@ -97,5 +76,3 @@ Consider the following questions:
 - How do the responses differ from the each other?
 - Which mode should you use in each scenario?
 
-# About This Repository
-Forked from [fastapi/full-stack-fastapi-template](https://github.com/fastapi/full-stack-fastapi-template). Frontend removed to make the project suitable for Python developers.
