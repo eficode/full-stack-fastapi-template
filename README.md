@@ -1,12 +1,12 @@
 # FastAPI Exercise Application for Copilot Trainings
-The purpose of this repository is to be used as an exercise application in GitHub Copilot trainings for Python developers. 
+The purpose of this repository is to be used as an exercise application in GitHub Copilot trainings for Python developers.
 
 ## Technology Stack and Features
 
 - ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
     - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
     - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
-    - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
+    - 💾 [DynamoDM](https://aws.amazon.com/dynamodb/) as the NoSQL database.
 - 🐋 [Docker Compose](https://www.docker.com) for development and production.
 - 🔒 Secure password hashing by default.
 - 🔑 JWT (JSON Web Token) authentication.
@@ -48,7 +48,7 @@ are just some lines you could add into your instruction file
       - Instructions for building, running tests etc.
 - In the following exercises, take notice how the file is automatically added to all prompts. See if the contests could be refined based on the effectiveness of the prompts.
 
-## 2. Initialize a MCP server for PostgreSQL
+## 2. Initialize a MCP server for DynamoDB
 
 - Racap of MCP servers
     - MCP (Model Context Protocol) servers provide a standardized way to interact with various tools, services, and systems.
@@ -58,18 +58,56 @@ are just some lines you could add into your instruction file
     - They support multiple types of integrations, including databases, APIs, and cloud services.
     - MCP servers enable real-time exploration, execution, and interaction with connected resources.
     -  [A wide variety of MCP servers are aldready available](https://mcp.so/)
-    -  In the following exercise [PostgreSQL MCP server](https://mcp.so/server/postgres/modelcontextprotocol) will be configured and used
-- Exercise: Initialize a MCP server for PostgreSQL (VS Code)
-    - VS Code => Shift+CMD+P
-    - \> MCP: Add server...
-    - Docker image => `mcp/postgres`
-    - Select "Allow"
-    - Postgres URL: `postgresql://postgres:changethis@host.docker.internal:5432/app`
-    - Select "Workspace"
-    - Start the server by clicking on the play button in mcp.json
-    - The query tool provided by the MCP server should be now available in the tools menu in the agent mode prompt box
-    - Try out the tool e.g. with the following prompt: "What is the schema of my database #query"
-    - Think about how the information provided by the MCP server could be utilised in prompts targeting the codebase
+    - In the following exercise [DynamoDB MCP server](https://github.com/imankamyabi/dynamodb-mcp-server) will be configured and used
+- Exercise: Initialize a MCP server for dynamoDB (VS Code)
+    - Clone the [GitHub repository](https://github.com/imankamyabi/dynamodb-mcp-server)
+    - Navigate to the cloned repository
+    - Build the Docker image and tag it as you see fit. E.g `docker build -t my-mcp-server .`
+
+:exclamation: **NOTE!!** Since we're building the image ourselves and we haven't
+pushed the image to Docker Hub we won't follow these steps, which would be the
+standard way of adding an MCP server.
+
+> - VS Code => Shift+CMD+P
+> - \> MCP: Add server...
+> - Docker image => `mcp/postgres`
+> - Select "Allow"
+> - Postgres URL: `postgresql://postgres:changethis@host.docker.internal:5432/app`
+> - Select "Workspace"
+> - Start the server by clicking on the play button in mcp.json
+> - The query tool provided by the MCP server should be now available in the tools menu in the agent mode prompt box
+> - Try out the tool e.g. with the following prompt: "What is the schema of my database #query"
+> - Think about how the information provided by the MCP server could be utilised in prompts targeting the codebase
+
+Instead, we'll continue by adding the server configuration manually to a file
+called `.vscode/mcp.json`
+
+```json
+{
+    "servers": {
+        "dynamodb": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "--network=host",
+                "-e", "AWS_ACCESS_KEY_ID=fakeMyKeyId",
+                "-e", "AWS_SECRET_ACCESS_KEY=fakeSecretAccessKey",
+                "-e", "AWS_REGION=local",
+                "-e", "AWS_SESSION_TOKEN=fakeSessionToken",
+                "my-mcp-server"
+            ]
+        }
+    }
+}
+```
+
+The `--network=host` is just to ensure the MCP server container is running in the same
+network as the database container. You can try removing this or changing this to
+another network depending on your Docker configurations.
+
+Remember to rename `my-mcp-server` to whatever you tagged your instance.
 
 ## 3. Prompt files
 
