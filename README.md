@@ -96,7 +96,7 @@ called `.vscode/mcp.json` following the instructions from the
                 "-e", "AWS_ACCESS_KEY_ID=fakeMyKeyId",
                 "-e", "AWS_SECRET_ACCESS_KEY=fakeSecretAccessKey",
                 "-e", "AWS_REGION=local",
-                "-e", "AWS_SESSION_TOKEN=fakeSessionToken",
+                "-e", "AWS_ENDPOINT_URL=http://localhost:8001",
                 "my-mcp-server"
             ]
         }
