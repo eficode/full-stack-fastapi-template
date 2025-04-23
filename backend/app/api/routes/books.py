@@ -2,108 +2,150 @@ import uuid
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from sqlmodel import func, select
 
-from app.api.deps import CurrentUser, SessionDep
+from app import crud
+from app.api.deps import CurrentUser
+from app.core.db import get_table, BOOK_TABLE
 from app.models import Book, BookCreate, BookPublic, BooksPublic, BookUpdate, Message
+from boto3.dynamodb.conditions import Key
 
 router = APIRouter(prefix="/books", tags=["books"])
 
 
 @router.get("/", response_model=BooksPublic)
 def read_books(
-    session: SessionDep, current_user: CurrentUser, skip: int = 0, limit: int = 100
+    current_user: CurrentUser, skip: int = 0, limit: int = 100
 ) -> Any:
     """
     Retrieve books.
     """
+    # For regular users, get only their books
+    # For superusers, get all books
+    book_table = get_table(BOOK_TABLE)
 
     if current_user.is_superuser:
-        count_statement = select(func.count()).select_from(Book)
-        count = session.exec(count_statement).one()
-        statement = select(Book).offset(skip).limit(limit)
-        books = session.exec(statement).all()
+        response = book_table.scan(Limit=limit)
+        books = response.get('Items', [])
     else:
-        count_statement = (
-            select(func.count())
-            .select_from(Book)
-            .where(Book.owner_id == current_user.id)
+        # Query using the GSI for owner_id
+        response = book_table.query(
+            IndexName="owner_index",
+            KeyConditionExpression=Key('owner_id').eq(str(current_user.id)),
+            Limit=limit
         )
-        count = session.exec(count_statement).one()
-        statement = (
-            select(Book)
-            .where(Book.owner_id == current_user.id)
-            .offset(skip)
-            .limit(limit)
-        )
-        books = session.exec(statement).all()
+        books = response.get('Items', [])
 
-    return BooksPublic(data=books, count=count)
+    # Handle pagination
+    if skip > 0 and skip < len(books):
+        books = books[skip:]
+
+    return BooksPublic(
+        data=[BookPublic(**book) for book in books],
+        count=len(books)
+    )
 
 
 @router.get("/{id}", response_model=BookPublic)
-def read_book(session: SessionDep, current_user: CurrentUser, id: uuid.UUID) -> Any:
+def read_book(current_user: CurrentUser, id: uuid.UUID) -> Any:
     """
     Get book by ID.
     """
-    book = session.get(Book, id)
-    if not book:
+    book_table = get_table(BOOK_TABLE)
+    response = book_table.get_item(Key={"id": str(id)})
+    book_data = response.get("Item")
+
+    if not book_data:
         raise HTTPException(status_code=404, detail="Book not found")
-    if not current_user.is_superuser and (book.owner_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
+
+    book = Book(**book_data)
+
+    # Check if user has permission to access this book
+    if not current_user.is_superuser and str(book.owner_id) != str(current_user.id):
+        raise HTTPException(status_code=403, detail="Not enough permissions")
+
     return book
 
 
 @router.post("/", response_model=BookPublic)
 def create_book(
-    *, session: SessionDep, current_user: CurrentUser, book_in: BookCreate
+    *, current_user: CurrentUser, book_in: BookCreate
 ) -> Any:
     """
     Create new book.
     """
-    book = Book.model_validate(book_in, update={"owner_id": current_user.id})
-    session.add(book)
-    session.commit()
-    session.refresh(book)
+    book = crud.create_book(book_in=book_in, owner_id=current_user.id)
     return book
 
 
 @router.put("/{id}", response_model=BookPublic)
 def update_book(
-    *,
-    session: SessionDep,
-    current_user: CurrentUser,
-    id: uuid.UUID,
-    book_in: BookUpdate,
+    *, current_user: CurrentUser, id: uuid.UUID, book_in: BookUpdate
 ) -> Any:
     """
     Update a book.
     """
-    book = session.get(Book, id)
-    if not book:
+    book_table = get_table(BOOK_TABLE)
+    response = book_table.get_item(Key={"id": str(id)})
+    book_data = response.get("Item")
+
+    if not book_data:
         raise HTTPException(status_code=404, detail="Book not found")
-    if not current_user.is_superuser and (book.owner_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    update_dict = book_in.model_dump(exclude_unset=True)
-    book.sqlmodel_update(update_dict)
-    session.add(book)
-    session.commit()
-    session.refresh(book)
-    return book
+
+    book = Book(**book_data)
+
+    # Check if user has permission to update this book
+    if not current_user.is_superuser and str(book.owner_id) != str(current_user.id):
+        raise HTTPException(status_code=403, detail="Not enough permissions")
+
+    # Create update expression for DynamoDB
+    update_data = book_in.model_dump(exclude_unset=True)
+
+    update_expression = "SET "
+    expression_attr_values = {}
+
+    for key, value in update_data.items():
+        if value is not None:  # Only update non-None values
+            update_expression += f"{key} = :{key}, "
+            expression_attr_values[f":{key}"] = value
+
+    # Remove trailing comma and space
+    if update_expression != "SET ":
+        update_expression = update_expression[:-2]
+
+        book_table.update_item(
+            Key={"id": str(id)},
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=expression_attr_values
+        )
+
+    # Get updated book
+    response = book_table.get_item(Key={"id": str(id)})
+    updated_book_data = response.get("Item", {})
+
+    return Book(**updated_book_data) if updated_book_data else book
 
 
 @router.delete("/{id}")
 def delete_book(
-    session: SessionDep, current_user: CurrentUser, id: uuid.UUID
+    *, current_user: CurrentUser, id: uuid.UUID
 ) -> Message:
     """
     Delete a book.
     """
-    book = session.get(Book, id)
-    if not book:
+    book_table = get_table(BOOK_TABLE)
+    response = book_table.get_item(Key={"id": str(id)})
+    book_data = response.get("Item")
+
+    if not book_data:
         raise HTTPException(status_code=404, detail="Book not found")
-    if not current_user.is_superuser and (book.owner_id != current_user.id):
-        raise HTTPException(status_code=400, detail="Not enough permissions")
-    session.delete(book)
-    session.commit()
+
+    book = Book(**book_data)
+
+    # Check if user has permission to delete this book
+    if not current_user.is_superuser and str(book.owner_id) != str(current_user.id):
+        raise HTTPException(status_code=403, detail="Not enough permissions")
+
+    # Delete the book
+    book_table.delete_item(Key={"id": str(id)})
+
     return Message(message="Book deleted successfully")

@@ -7,7 +7,6 @@ from pydantic import (
     BeforeValidator,
     EmailStr,
     HttpUrl,
-    PostgresDsn,
     computed_field,
     model_validator,
 )
@@ -51,23 +50,33 @@ class Settings(BaseSettings):
 
     PROJECT_NAME: str
     SENTRY_DSN: HttpUrl | None = None
-    POSTGRES_SERVER: str
-    POSTGRES_PORT: int = 5432
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str = ""
-    POSTGRES_DB: str = ""
+
+    # DynamoDB connection settings
+    DYNAMODB_ENDPOINT: str = "http://db:8000"  # Use container name for Docker networking
+    DYNAMODB_PORT: int = 8000
+    DYNAMODB_REGION: str = "local"
+    AWS_ACCESS_KEY_ID: str = "fakeMyKeyId"
+    AWS_SECRET_ACCESS_KEY: str = "fakeSecretAccessKey"
 
     @computed_field  # type: ignore[prop-decorator]
     @property
-    def SQLALCHEMY_DATABASE_URI(self) -> PostgresDsn:
-        return MultiHostUrl.build(
-            scheme="postgresql+psycopg",
-            username=self.POSTGRES_USER,
-            password=self.POSTGRES_PASSWORD,
-            host=self.POSTGRES_SERVER,
-            port=self.POSTGRES_PORT,
-            path=self.POSTGRES_DB,
-        )
+    def DYNAMODB_CONNECTION_CONFIG(self) -> dict:
+        """
+        Returns the DynamoDB connection configuration
+
+        When running in Docker, endpoint should be http://db:8000
+        When running locally outside Docker, endpoint should use localhost
+        """
+        # For Docker environment, use container hostname (db)
+        # For local development, use localhost with appropriate port
+        endpoint = self.DYNAMODB_ENDPOINT
+
+        return {
+            "endpoint_url": endpoint,
+            "region_name": self.DYNAMODB_REGION,
+            "aws_access_key_id": self.AWS_ACCESS_KEY_ID,
+            "aws_secret_access_key": self.AWS_SECRET_ACCESS_KEY,
+        }
 
     SMTP_TLS: bool = True
     SMTP_SSL: bool = False
@@ -109,10 +118,7 @@ class Settings(BaseSettings):
     @model_validator(mode="after")
     def _enforce_non_default_secrets(self) -> Self:
         self._check_default_secret("SECRET_KEY", self.SECRET_KEY)
-        self._check_default_secret("POSTGRES_PASSWORD", self.POSTGRES_PASSWORD)
-        self._check_default_secret(
-            "FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD
-        )
+        self._check_default_secret("FIRST_SUPERUSER_PASSWORD", self.FIRST_SUPERUSER_PASSWORD)
 
         return self
 
