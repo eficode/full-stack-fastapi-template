@@ -6,7 +6,7 @@ The purpose of this repository is to be used as an exercise application in GitHu
 - ⚡ [**FastAPI**](https://fastapi.tiangolo.com) for the Python backend API.
     - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
     - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
-    - 💾 [DynamoDM](https://aws.amazon.com/dynamodb/) as the NoSQL database.
+    - 💾 [DynamoDB](https://aws.amazon.com/dynamodb/) as the NoSQL database.
 - 🐋 [Docker Compose](https://www.docker.com) for development and production.
 - 🔒 Secure password hashing by default.
 - 🔑 JWT (JSON Web Token) authentication.
