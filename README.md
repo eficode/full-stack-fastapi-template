@@ -80,7 +80,8 @@ standard way of adding an MCP server.
 > - Think about how the information provided by the MCP server could be utilised in prompts targeting the codebase
 
 Instead, we'll continue by adding the server configuration manually to a file
-called `.vscode/mcp.json`
+called `.vscode/mcp.json` following the instructions from the
+[mcp.so documentation](https://mcp.so/server/dynamodb-mcp-server/imankamyabi?tab=content).
 
 ```json
 {
